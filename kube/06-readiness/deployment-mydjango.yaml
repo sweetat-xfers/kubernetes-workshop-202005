@@ -31,18 +31,13 @@ spec:
         app: mydjango
         tier: frontend
     spec:
+      initContainers:
+      - name: init-mydjango
+        image: busybox
+        command: ['sh', '-c', 'until nslookup mysql; do echo waiting for mysql; sleep 2; done;']
       containers:
       - name: mydjango
         image: mydjango:0.0.1
-        ports:
-        - containerPort: 8000
-        env:
-        - name: mydjango_DB_HOST
-          value: mydjango-mysql
-        - name: mydjango_DB_USER
-          value: django
-        - name: mydjango_DB_PASSWORD
-          value: password
         ports:
         - containerPort: 8000
           name: mydjango
