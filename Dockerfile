@@ -4,7 +4,7 @@ WORKDIR /app
 
 EXPOSE 8000
 
-COPY . /app
+COPY ./mysite /app
 
 RUN pip install --upgrade pip \
   && pip install django mysqlclient \
