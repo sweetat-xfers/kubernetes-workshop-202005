@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mydjango-configmap
+  namespace: myapp
+data:
+  # property-like keys; each key maps to a simple value
+  MYTEST: myowntesting
+  # file-like keys
+  mysettings.py: |+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': 'mysql',
+            'PORT': '3306',
+            'USER': 'mydjango',
+            'PASSWORD': 'password',
+            'NAME': 'mydjango',
+        }
+    }
+
