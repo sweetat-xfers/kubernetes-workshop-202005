@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  labels:
+    app: mydjango
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: mydjango
+    tier: database
+  clusterIP: None
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    app: mydjango
+spec:
+  selector:
+    matchLabels:
+      app: mydjango
+      tier: database
+  template:
+    metadata:
+      labels:
+        app: mydjango
+        tier: database
+    spec:
+      containers:
+      - image: mysql:5
+        name: mysql
+        env:
+        - name: MYSQL_DATABASE
+          value: django
+        - name: MYSQL_USER
+          value: django
+        - name: MYSQL_PASSWORD
+          value: password
+        - name: MYSQL_ROOT_PASSWORD
+          value: password2
+        ports:
+        - containerPort: 3306
+          name: mysql

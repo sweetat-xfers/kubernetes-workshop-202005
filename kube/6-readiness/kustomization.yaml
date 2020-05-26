@@ -1,0 +1,3 @@
+resources:
+    - deployment-mysql.yaml
+    - deployment-mydjango.yaml

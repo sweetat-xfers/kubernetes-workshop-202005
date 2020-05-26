@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  labels:
+    app: mydjango
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: mydjango
+    tier: database
+  clusterIP: None
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  labels:
+    app: mydjango
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    app: mydjango
+spec:
+  selector:
+    matchLabels:
+      app: mydjango
+      tier: database
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mydjango
+        tier: database
+    spec:
+      containers:
+      - image: mysql:5
+        name: mysql
+        env:
+        - name: MYSQL_DATABASE
+          value: django
+        - name: MYSQL_USER
+          value: django
+        - name: MYSQL_PASSWORD
+          value: password
+        - name: MYSQL_ROOT_PASSWORD
+          value: password2
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+        readinessProbe:
+          tcpSocket:
+            port: 3306
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: 3306
+          initialDelaySeconds: 10
+          periodSeconds: 5
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim

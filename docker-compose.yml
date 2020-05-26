@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+    mysql:
+        image: mysql:5
+        ports:
+            - 3306:3306
+        environment:
+            MYSQL_DATABASE: django
+            MYSQL_USER: django
+            MYSQL_PASSWORD: password
+            MYSQL_ROOT_PASSWORD: password2
+    mydjango:
+        image: mydjango:0.0.1
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        depends_on:
+            - mysql
+        ports:
+            - 8000:8000
