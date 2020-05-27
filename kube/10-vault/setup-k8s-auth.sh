@@ -53,15 +53,17 @@ export SA_JWT_TOKEN=$(kubectl get secret $VAULT_SA_NAME -o jsonpath="{.data.toke
 
 # Set SA_CA_CRT to the PEM encoded CA cert used to talk to Kubernetes API
 export SA_CA_CRT=$(kubectl get secret $VAULT_SA_NAME -o jsonpath="{.data['ca\.crt']}" | base64 --decode; echo)
+echo $SA_CA_CRT > /tmp/sa_ca.crt
 
 # Set K8S_HOST to minikube IP address
-export K8S_HOST=$(kubectl describe node docker-desktop | grep Internal | awk -F\  '{ print $2}')
+export K8S_HOST=host.docker.internal
 
 # Enable the Kubernetes auth method at the default path ("auth/kubernetes")
 vault auth enable kubernetes
 
 # Tell Vault how to communicate with the Kubernetes (Minikube) cluster
-vault write auth/kubernetes/config token_reviewer_jwt="$SA_JWT_TOKEN" kubernetes_host="https://$K8S_HOST:8443" kubernetes_ca_cert="$SA_CA_CRT"
+echo vault write auth/kubernetes/config token_reviewer_jwt="$SA_JWT_TOKEN" kubernetes_host="https://kubernetes.docker.internal:6443" kubernetes_ca_cert="$SA_CA_CRT"
+vault write auth/kubernetes/config token_reviewer_jwt="$SA_JWT_TOKEN" kubernetes_host="https://kubernetes.docker.internal:6443" kubernetes_ca_cert="$SA_CA_CRT"
 
 # Create a role named, 'example' to map Kubernetes Service Account to
 #  Vault policies and default token TTL

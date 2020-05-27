@@ -1,0 +1,3 @@
+resources:
+    - configmap.yaml
+    - example-k8s-spec.yaml
