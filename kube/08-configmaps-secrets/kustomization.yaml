@@ -1,4 +1,5 @@
 resources:
+    - namespace-myapp.yaml
     - configmap-mydjango.yaml
     - secrets-mysql.yaml
     - deployment-mysql.yaml

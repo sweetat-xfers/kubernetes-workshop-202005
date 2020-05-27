@@ -11,7 +11,7 @@ data:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'HOST': 'mysql',
+            'HOST': 'mysql-svc',
             'PORT': '3306',
             'USER': 'mydjango',
             'PASSWORD': 'password',
