@@ -1,3 +1,4 @@
 resources:
+    - namespace-myapp.yaml
     - deployment-mysql.yaml
     - deployment-mydjango.yaml
