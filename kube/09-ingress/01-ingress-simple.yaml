@@ -1,0 +1,8 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: myingress
+spec:
+  backend:
+    serviceName: mydjango
+    servicePort: 8000

@@ -1,0 +1,6 @@
+resources:
+    - namespaces.yaml
+    - deployment-mysql.yaml
+    - deployment-mydjango.yaml
+    - deployment-php-apache.yaml
+    - 02-ingress-fanout.yaml

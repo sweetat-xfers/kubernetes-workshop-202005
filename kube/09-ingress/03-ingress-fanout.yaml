@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mydjango
+  namespace: ingress
+spec:
+  type: ExternalName
+  externalName: mydjango-svc.myapp.svc.cluster.local
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-apache
+  namespace: ingress
+spec:
+  type: ExternalName
+  externalName: php-apache.php-apache.svc.cluster.local
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: myingress
+  namespace: ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /bar
+        backend:
+          serviceName: mydjango
+          servicePort: 8000
+      - path: /foo
+        backend:
+          serviceName: php-apache 
+          servicePort: 8000

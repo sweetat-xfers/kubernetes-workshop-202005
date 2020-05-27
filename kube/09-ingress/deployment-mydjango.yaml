@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mydjango-svc
+  namespace: myapp
+  labels:
+    app: mydjango
+spec:
+  ports:
+    - port: 8000
+      protocol: TCP
+  selector:
+    app: mydjango
+    tier: frontend
+  # type: LoadBalancer
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: mydjango-deployment
+  namespace: myapp
+  labels:
+    app: mydjango
+spec:
+  selector:
+    matchLabels:
+      app: mydjango
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: mydjango
+        tier: frontend
+    spec:
+      containers:
+      - name: mydjango
+        image: mydjango:0.0.1
+        ports:
+        - containerPort: 8000
+          name: mydjango-svc

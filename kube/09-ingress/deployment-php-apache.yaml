@@ -1,0 +1,44 @@
+# application/php-apache.yaml 
+# https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-apache
+  namespace: php-apache
+  labels:
+    app: php-apache
+spec:
+  ports:
+  - port: 8000
+    targetPort: 80
+    protocol: TCP
+  selector:
+    app: php-apache
+  # type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-apache
+  namespace: php-apache
+spec:
+  selector:
+    matchLabels:
+      app: php-apache
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: php-apache
+    spec:
+      containers:
+      - name: php-apache
+        image: k8s.gcr.io/hpa-example
+        ports:
+        - containerPort: 80
+          name: php-apache
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
