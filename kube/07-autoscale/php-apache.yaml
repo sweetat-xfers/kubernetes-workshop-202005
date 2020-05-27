@@ -39,5 +39,5 @@ spec:
     protocol: TCP
   selector:
     run: php-apache
-  #  type: LoadBalancer
+  type: LoadBalancer
 

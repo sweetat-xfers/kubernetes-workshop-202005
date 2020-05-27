@@ -7,10 +7,28 @@
 ## Steps
 
 1. You need to have a clean kubernetes cluster
-2. ```kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.3.6/components.yaml```
-3. Test that this works by running 
+2. Install metrics-server
+
+  ```bash
+  kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.3.6/components.yaml
+  ```
+
+3. Edit the metrics-server and add the args "--kubelet-insecure-tls"
+
+  ```bash
+  kubectl edit -n kube-system deployment metrics-server
+  ```
+
+4. Test that this works by running 
+
   ```
   kubectl top nodes
   ```
-4. Check ```kubectl logs deployment metrics-server``` for information
-5. Follow steps in References #1
+
+5. Check that the metrics-server is running
+
+  ```bash
+  kubectl logs deployment metrics-server
+  ```
+
+6. Follow steps in References #1
